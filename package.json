@@ -2,7 +2,9 @@
   name: 'graft',
   description: '',
   version: '0.1-pre01',
-  author: 'Antonio Salazar Cardozo <savedfastcool@gmail.com>'
-  main: './index.js'
-  engines: { 'node': '>= 0.3.0' }
+  author: 'Antonio Salazar Cardozo <savedfastcool@gmail.com>',
+  main: './index.js',
+  engines: { 'node': '>= 0.3.0' },
+  repository: { type: 'git', url: 'http://github.com/shadowfiend/graft.git' },
+  licenses: [{ type: 'MIT', url: 'http://github.com/shadowfiend/graft/master/LICENSE' }]
 }
