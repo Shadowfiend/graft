@@ -63,13 +63,10 @@ we do some goodness:
       })
 
 The mechanism is straightforward: if you pass an array as the second parameter,
-the array is checked: if the objects inside it are Functions, each Function is
-invoked in turn with a new clone of the matched element(s), then the results
-are gathered up and put into the DOM in the matched elements' place. If the
-objects inside it are plain-jane vanilla Objects, as above, then each of those
-Objects is passed to graft for grafting purposes with a new clone of the
-matched element(s), and again the results are gathered and dropped into the
-DOM.
+each object in the array is passed to graft in turn, each with a new clone of
+the matched element(s). Then, these elements are gathred up and put into the
+DOM instead of the matched element. This means you provide an array of
+functions, if you prefer, or an object, as above, or a string, etc.
 
 The goodness is good, no?
 
@@ -115,24 +112,40 @@ addGraft = (jQuery) ->
 
     # If the selector is an object, it means we're grafting sub-selectors of
     # the top-level object.
-    if typeof(selector) == 'object'
+    if typeof selector == 'object'
       $base.graft subselector, generator for subselector, generator of selector
     else
-      # Functions get passed the result of the selector.
-      if typeof(generators) == 'function'
-        generators $base.find(selector)
-      # Strings are text for replacing the text of the selector matches.
-      else if typeof(generators) == 'string'
-        $base.find(selector).text(generators)
-      # If we get a jQuery object (identified by the selector property), we
-      # replace the selector matches' html contents with that object's
-      # contents.
-      else if typeof(generators) == 'object' && generators.selector?
-        $base.find(selector).html(generators)
-      # If we get a non-jQuery object, we just run graft all the properties as
-      # selectors with their values as generators.
-      else if typeof(generators) == 'object'
-        $base.find(selector).graft subselector, generator for subselector, generator of generators
+      switch typeof generators
+        # Functions get passed the result of the selector.
+        when 'function'
+          generators $base.find(selector)
+        # Strings are text for replacing the text of the selector matches.
+        when 'string' or 'number'
+          $base.find(selector).text(generators)
+        when 'object'
+          # If we get a jQuery object (identified by the selector property), we
+          # replace the selector matches' html contents with that object's
+          # contents.
+          if generators.selector?
+            $base.find(selector).html(generators)
+          # If we get an array, identified by a map property, we iterate
+          # through it, grafting its components to clones of the base, then
+          # returning them as one group.
+          # FIXME This will cause issues in older browsers.
+          else if generators.map?
+            generators.map (generator) ->
+              generatorType = typeof generator
+              if generatorType == 'object'
+                $base = $base.clone().graft generator
+              else if generatorType == 'string' || generatorType == 'number'
+                $base = $base.clone().text generator
+              else if generatorType == 'function'
+                $base = $base.each generator
+
+          # If we get a non-jQuery object, we just run graft all the properties as
+          # selectors with their values as generators.
+          else
+            $base.find(selector).graft subselector, generator for subselector, generator of generators
 
     # If we are a template, append the result to the original template's
     # parent.
