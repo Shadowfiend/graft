@@ -111,3 +111,18 @@ prettiness in use. For example:
             '.avatar[src]': avatarFor(author),
             '.description': author.description
 
+## Node.js
+
+For node.js, the module exports a function that lets you just pass in HTML or
+the name of a file containing HTML and run with it. We can use it as follows:
+
+    var graft = require('graft').graft;
+    graft('<p>My <a href="place.html">HTML</a></p><div>magic</div>',
+      {
+        'p a[href]': 'http://google.com',
+        'div': 'unicorns!'
+      },
+      function(errors, grafted) {
+        response.send(grafted, { 'Content-Type': 'text/html' }, 200);
+      });
+
