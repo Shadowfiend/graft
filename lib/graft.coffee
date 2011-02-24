@@ -87,7 +87,20 @@ addGraft = (jQuery) ->
           generators $base.find(selector)
         # Strings are text for replacing the text of the selector matches.
         when 'string' or 'number'
-          $base.find(selector).text(generators)
+          match = null
+          if match = /(.*)\[([^\]]+)\]$/.exec(selector)
+            [strippedSelector, attribute] = match[1..]
+
+            if attribute[-1] == '+'
+              attribute = attribute[0..-1]
+
+              $base
+                .find(strippedSelector)
+                .each (elt) -> $(elt).attr(attribute, "#{$(elt).attr(attribute)} #{generators}")
+            else
+              $base.find(strippedSelector).attr(attribute, generators)
+          else
+            $base.find(selector).text(generators)
         when 'object'
           # If we get a jQuery object (identified by the selector property), we
           # replace the selector matches' html contents with that object's
