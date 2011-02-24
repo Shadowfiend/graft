@@ -7,10 +7,13 @@ possible.
 **Solution:** graft.
 
 **Props to/superheavy inspiration from:** [Lift][].
-**Also see:** A very similar library from the folks at nodejitsu, [weld][].
+**Also see:** A very similar library from the folks at [nodejitsu][], [weld][].
+**Built on:** The awesomeness of [jsdom][] (also from the folks at nodejitsu).
 
 [lift]: http://liftweb.net/
+[nodejitsu]: http://nodejitsu.com/
 [weld]: https://github.com/hij1nx/weld
+[jsdom]: https://github.com/tmpvar/jsdom
 
 There are several possible usages:
 
