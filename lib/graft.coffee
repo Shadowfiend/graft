@@ -38,6 +38,13 @@ There are several possible usages:
         '.author': authorName,
         '.link': $('a').text(authorName).href('link-to-author')
       }) // as above, but searches the top-level object instead of a sub-object
+    .graft({
+      '.author': author.name,
+      '.link[href]': linkFor(author) // sets the href attribute
+      '.link[class+] ': author.category // adds the category to the class attribute
+      '.other-link[target] ': 'EXTERNAL' // targets other-links with a target attribute (note space at the end)
+      '.other-link[target=_blank]': 'new window' // targets other-links with a target attribute _blank
+    })
 
 If the graft call is invoked on an element with class `template', it
 will clone that element and remove the template class, add the resulting
@@ -45,7 +52,6 @@ element to the same container, and then return the new resulting element. If,
 on the other hand, the graft call is invoked on an element without that class,
 it will operate directly on the element and return it.
 
--------------
 Collections
 -------------
 
@@ -61,46 +67,6 @@ we do some goodness:
           '.link': $('a').text(author.name).href(linkFor(author)),
         }
       })
-
-The mechanism is straightforward: if you pass an array as the second parameter,
-each object in the array is passed to graft in turn, each with a new clone of
-the matched element(s). Then, these elements are gathred up and put into the
-DOM instead of the matched element. This means you provide an array of
-functions, if you prefer, or an object, as above, or a string, etc.
-
-The goodness is good, no?
-
---------------------------
-Easily setting attributes
---------------------------
-
-Graft adds just a little bit of bam-bam-bam to selectors:
-
-  $('li.template')
-    .graft({
-      '.author': author.name,
-      '.link[href]': linkFor(author)
-    })
-
-This lets us set the href with zero effort. The downside is, the above selector
-also means `elements with class link that have an attribute href'. I've found
-that is fairly rarely used, but if you still want to use it, just put a space
-at the end of the selector:
-
-  $('li.template')
-    .graft({
-      '.author': author.name,
-      '.link[href] ': function($elt) { /* do stuff with the link */ }
-    })
-
-We're not *quite* done yet, however. There is also a dash of goodness for
-adding to an attribute (particularly handy for classes):
-
-  $('li.template')
-    .graft({
-      '.author': author.name,
-      '.link[class+] ': author.category
-    })
 
 ###
 addGraft = (jQuery) ->
