@@ -51,6 +51,9 @@ vows
       topic: htmlize("""
         <div class="item">Whazak</div>
         <a class="link" href="booyan">Whazam</a>
+        <div class="nested">
+          <span class="magic">Boom</span>
+        </div>
         """)
 
       'when you graft plain text to an element':
@@ -76,4 +79,17 @@ vows
         "then that element's attribute will have a space and the text appended": (errors, $html) ->
           assert.isNull errors
           assert.equal $html.find('.item').attr('class'), 'item info'
+
+      'when you graft with a nested object':
+        topic: graftAndjQueryHtml(
+          '.nested':
+            'span': 'hi',
+            'span [class]': 'boom'
+        )
+
+        "then the nested object should be used to raft the matched element": (errors, $html) ->
+          assert.isNull errors
+
+          assert.equal $html.find('.nested span').text(), 'hi'
+          assert.equal $html.find('.nested span').attr('class'), 'boom'
   ).export module
