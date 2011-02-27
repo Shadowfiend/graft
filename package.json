@@ -18,6 +18,8 @@
     "examples": "./examples"
   },
   "dependencies": {
-    "jsdom": "0.2.0"
+    "jsdom": "0.2.0",
+    "coffee-script": "1.0.1"
+  }
 }
 
