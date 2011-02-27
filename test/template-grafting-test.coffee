@@ -1,3 +1,5 @@
+require.paths.unshift "#{__dirname}/../lib"
+
 vows = require 'vows'
 assert = require 'assert'
 jsdom = require 'jsdom'
