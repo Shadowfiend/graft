@@ -1,14 +1,23 @@
 {
-  name: 'graft',
-  description: 'A library for template binding to facilitate view-first development.',
-  version: '0.1',
-  author: 'Antonio Salazar Cardozo <savedfastcool@gmail.com>',
-  main: './lib/graft.js',
-  engines: { 'node': '>= 0.4.0' },
-  repositories: [{ type: 'git', url: 'http://github.com/shadowfiend/graft.git' }],
-  licenses: [{ type: 'MIT', url: 'http://github.com/shadowfiend/graft/master/LICENSE' }],
-  directoresi: { lib: './lib', examples: './examples' },
-  dependencies: {
-    'jsdom': '0.2.0',
-  }
+  "name": "graft",
+  "description": "A library for template binding to facilitate view-first development.",
+  "version": "0.1.0",
+  "author": "Antonio Salazar Cardozo <savedfastcool@gmail.com>",
+  "main": "./lib/graft.js",
+  "engines": { "node": ">= 0.4.0" },
+  "repositories": [{
+    "type": "git",
+    "url": "http://github.com/shadowfiend/graft.git"
+  }],
+  "licenses": [{
+    "type": "MIT",
+    "url": "http://github.com/shadowfiend/graft/master/LICENSE"
+  }],
+  "directories": {
+    "lib": "./lib",
+    "examples": "./examples"
+  },
+  "dependencies": {
+    "jsdom": "0.2.0"
 }
+
