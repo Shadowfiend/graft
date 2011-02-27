@@ -139,7 +139,7 @@ exports.graft = (html, generators, callback) ->
   window = jsdom.jsdom(html).createWindow()
 
   try
-    jsdom.jQueryify window, "#{__dirname}/jquery-1.5.0.js", ->
+    jsdom.jQueryify window, "#{__dirname}/jquery-1.5.js", ->
       jquery = window.jQuery
 
       addGraft jquery

@@ -6,7 +6,7 @@ eyes = require('eyes')
 
 jqueryify = (html, callback) ->
   window = jsdom.jsdom(html).createWindow()
-  jsdom.jQueryify window, "#{__dirname}/../lib/jquery-1.4.2.js", (window, jquery) ->
+  jsdom.jQueryify window, "#{__dirname}/../lib/jquery-1.5.js", (window, jquery) ->
     jquery = window.jQuery
 
     callback null, jquery('body')
