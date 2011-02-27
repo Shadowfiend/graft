@@ -1,6 +1,6 @@
 # Graft
 
-**Proposition:** my view should be viewable as plain HTML without a browser while
+**Proposition:** my view should be viewable as plain HTML without a server while
 I'm designing/styling it, and data should be bound on top of it as easily as
 possible.
 
