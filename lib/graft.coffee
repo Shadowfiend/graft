@@ -14,7 +14,6 @@ I'm designing/styling it, and data should be bound on top of it as easily as
 possible.
 
 Solution: graft.
-Props to/superheavy inspiration from: Lift (http://liftweb.net/).
 
 There are several possible usages:
 
@@ -85,18 +84,21 @@ addGraft = (jQuery) ->
         # Functions get passed the result of the selector.
         when 'function'
           generators $base.find(selector)
-        # Strings are text for replacing the text of the selector matches.
+        # Strings are text for replacing the text of the selector matches, or
+        # if mixed with attribute selectors for setting or adding to attribute
+        # values.
         when 'string' or 'number'
           match = null
           if match = /(.*)\[([^\]]+)\]$/.exec(selector)
             [strippedSelector, attribute] = match[1..]
 
-            if attribute[-1] == '+'
-              attribute = attribute[0..-1]
+            if attribute.charAt(attribute.length - 1) == '+'
+              attribute = attribute.substring(0, attribute.length - 1)
 
               $base
                 .find(strippedSelector)
-                .each (elt) -> $(elt).attr(attribute, "#{$(elt).attr(attribute)} #{generators}")
+                .each (i, elt) ->
+                  $(elt).attr(attribute, "#{$(elt).attr(attribute)} #{generators}")
             else
               $base.find(strippedSelector).attr(attribute, generators)
           else
