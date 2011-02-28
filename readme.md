@@ -39,7 +39,7 @@ There are several possible usages:
       .graft(
         {
           '.author': authorName,
-          '.link': $('a').text(authorName).href('link-to-author')
+          '.link': $('<a>').text(authorName).attr('href', 'link-to-author')
         }) // as above, but searches the top-level object instead of a sub-object
 
 If the graft call is invoked on an element with class 'template', it
@@ -130,3 +130,45 @@ the name of a file containing HTML and run with it. We can use it as follows:
         response.send(grafted, { 'Content-Type': 'text/html' }, 200);
       });
 
+If you need access to the jQuery object (for example, because you want to
+create some elements to graft in), graft exposes an easier method for doing
+that, withjQuery:
+
+  var withjQuery = require('graft').withjQuery;
+
+  withjQuery('<p>My <a href="place.html">HTML</a></p><div>magic</div>', function(errors, $) {
+    $('body')
+      .graft({
+        'p a[href]': 'http://google.com',
+        'div': $('<p>').text('unicorns!')
+      })
+  });
+
+This lets you use jQuery directly when your use case requires it. You will then
+have to manually convert the jQuery results back to HTML:
+
+  var withjQuery = require('graft').withjQuery;
+
+  withjQuery('<p>My <a href="place.html">HTML</a></p><div>magic</div>', function(errors, $) {
+    $('body')
+      .graft({
+        'p a[href]': 'http://google.com',
+        'div': $('<p>').text('unicorns!')
+      });
+
+    response.send("<html>" + $('html').html() + "</html>", { 'Content-Type': 'text/html' }, 200);
+  });
+
+Graft exposes an htmlize function for this purpose, which is passed in as a second parameter:
+
+  var withjQuery = require('graft').withjQuery;
+
+  withjQuery('<p>My <a href="place.html">HTML</a></p><div>magic</div>', function(errors, $, htmlize) {
+    $('body')
+      .graft({
+        'p a[href]': 'http://google.com',
+        'div': $('<p>').text('unicorns!')
+      });
+
+    response.send(htmlize($), { 'Content-Type': 'text/html' }, 200);
+  });

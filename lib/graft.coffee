@@ -137,7 +137,6 @@ addGraft = (jQuery) ->
 
 exports.graft = (html, generators, callback) ->
   window = jsdom.jsdom(html).createWindow()
-
   try
     jsdom.jQueryify window, "#{__dirname}/jquery-1.5.js", ->
       jquery = window.jQuery
@@ -149,3 +148,15 @@ exports.graft = (html, generators, callback) ->
   catch error
     callback error
 
+exports.withjQuery = (html, callback) ->
+  try
+    window = jsdom.jsdom(html).createWindow()
+
+    jsdom.jQueryify window, "#{__dirname}/jquery-1.5.js", ->
+      jquery = window.jQuery
+
+      addGraft jquery
+
+      callback null, jquery, (html) -> "<html>#{html}</html>"
+  catch error
+    callback error
