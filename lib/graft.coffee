@@ -114,14 +114,20 @@ addGraft = (jQuery) ->
           # returning them as one group.
           # FIXME This will cause issues in older browsers.
           else if generators.map?
-            generators.map (generator) ->
+            $toGraft = $base.find(selector)
+            generators.map((generator) ->
               generatorType = typeof generator
+
               if generatorType == 'object'
-                $base = $base.clone().graft generator
+                $toGraft.clone().graft generator
               else if generatorType == 'string' || generatorType == 'number'
-                $base = $base.clone().text generator
+                $toGraft.clone().text generator
               else if generatorType == 'function'
-                $base = $base.each generator
+                $toGraft.clone().each generator
+            ).forEach ($generated) ->
+              $toGraft.before($generated)
+
+            $toGraft.remove()
 
           # If we get a non-jQuery object, we just run graft all the properties as
           # selectors with their values as generators.
@@ -131,7 +137,7 @@ addGraft = (jQuery) ->
     # If we are a template, append the result to the original template's
     # parent.
     if $original.is('.template')
-      $original.parent().append $base
+      $original.replaceWith $base
 
     $base
 
