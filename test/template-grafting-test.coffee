@@ -100,9 +100,9 @@ vows
       'when you graft jQueryied HTML to an element':
         topic:
           withjQueryAndjQueryHtml ($, htmlize) =>
-            htmlize($('html').graft(
-              '.magic': $('<a>').text('author').addClass('magic').attr('href', 'link')
-            ).html())
+            $('html').graft '.magic': $('<a>').text('author').addClass('magic').attr('href', 'link')
+
+            htmlize()
 
         'then the given element should be replaced with the jQueryied HTML': (errors, $html) ->
           assert.isNull errors

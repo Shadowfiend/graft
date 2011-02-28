@@ -157,6 +157,6 @@ exports.withjQuery = (html, callback) ->
 
       addGraft jquery
 
-      callback null, jquery, (html) -> "<html>#{html}</html>"
+      callback null, jquery, -> "<html>#{jquery('html').html()}</html>"
   catch error
     callback error

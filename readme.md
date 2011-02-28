@@ -159,7 +159,7 @@ have to manually convert the jQuery results back to HTML:
     response.send("<html>" + $('html').html() + "</html>", { 'Content-Type': 'text/html' }, 200);
   });
 
-Graft exposes an htmlize function for this purpose, which is passed in as a second parameter:
+Graft exposes an htmlize function for this purpose, which is passed in as a third parameter:
 
   var withjQuery = require('graft').withjQuery;
 
@@ -170,5 +170,5 @@ Graft exposes an htmlize function for this purpose, which is passed in as a seco
         'div': $('<p>').text('unicorns!')
       });
 
-    response.send(htmlize($), { 'Content-Type': 'text/html' }, 200);
+    response.send(htmlize(), { 'Content-Type': 'text/html' }, 200);
   });
