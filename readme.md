@@ -134,7 +134,8 @@ If you need access to the jQuery object (for example, because you want to
 create some elements to graft in), graft exposes an easier method for doing
 that, withjQuery:
 
-    var withjQuery = require('graft').withjQuery;
+    var graft = require('graft').graft,
+        withjQuery = graft.withjQuery;
 
     withjQuery('<p>My <a href="place.html">HTML</a></p><div>magic</div>', function(errors, $) {
       $('body')
@@ -147,7 +148,8 @@ that, withjQuery:
 This lets you use jQuery directly when your use case requires it. You will then
 have to manually convert the jQuery results back to HTML:
 
-    var withjQuery = require('graft').withjQuery;
+    var graft = require('graft').graft,
+        withjQuery = graft.withjQuery;
 
     withjQuery('<p>My <a href="place.html">HTML</a></p><div>magic</div>', function(errors, $) {
       $('body')
@@ -161,7 +163,8 @@ have to manually convert the jQuery results back to HTML:
 
 Graft exposes an htmlize function for this purpose, which is passed in as a third parameter:
 
-    var withjQuery = require('graft').withjQuery;
+    var graft = require('graft').graft,
+        withjQuery = graft.withjQuery;
 
     withjQuery('<p>My <a href="place.html">HTML</a></p><div>magic</div>', function(errors, $, htmlize) {
       $('body')
