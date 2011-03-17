@@ -51,6 +51,23 @@ element to the same container, and then return the new resulting element. If,
 on the other hand, the graft call is invoked on an element without that class,
 it will operate directly on the element and return it.
 
+For example, invoking graft on an element:
+
+    <div class="name">Name</div>
+
+As:
+
+    $('.name').graft('Wolverine');
+
+Would replace the name in the element above. Doing the same thing on the element:
+
+    <div class="template name">Name</div>
+
+Would instead result in a new element alongside the original:
+
+    <div class="template name">Name</div>
+    <div class="name">Wolverine</div>
+
 Collections
 -------------
 
