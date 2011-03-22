@@ -27,10 +27,14 @@ vows
 
         'and the form is submitted':
           topic: ($html, [html, dataHolder]) ->
-            # do a submit
+            action = $html.find('form').attr('action')
 
-          'then the goodness should happen': (errors, $html) ->
-            
+            graft.handleAjax()({ url: action, body: { name: 'magic' } }, {}, ->)
+
+            dataHolder
+
+          'then the callbacks should be triggered': (errors, dataHolder) ->
+            assert.equal dataHolder.name, 'magic'
 
   ).export module
 

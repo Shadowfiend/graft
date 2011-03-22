@@ -95,7 +95,7 @@ specified, thus also acting as a guard against replay attacks).
 ###
 addGraft = (jQuery) ->
   $ = jQuery
-  $.fn.graft = (selector, generators) ->
+  $.fn.graft = (selector, generators, interceptors) ->
     $original = $base = this
     if $original.is('.template')
       $base = $base.clone().removeClass('template')
@@ -103,8 +103,16 @@ addGraft = (jQuery) ->
     # If the selector is an object, it means we're grafting sub-selectors of
     # the top-level object.
     if typeof selector == 'object'
-      $base.graft subselector, generator for subselector, generator of selector
+      interceptors = generators
+
+      $base.graft subselector, generator, interceptors for subselector, generator of selector
     else
+      if interceptors?
+        for interceptor in interceptors
+          halt = interceptor($base, selector, generators)
+
+          return if halt
+
       switch typeof generators
         # Functions get passed the result of the selector.
         when 'function'
@@ -173,11 +181,13 @@ graft = (html, generators, callback) ->
       jquery = window.jQuery
 
       addGraft jquery
-      jquery('html').graft generators
+      jquery('html').graft generators, graft.interceptors
 
       callback null, "<html>#{jquery('html').html()}</html>"
   catch error
     callback error
+
+graft.interceptors = []
 
 graft.withjQuery = (html, callback) ->
   try
