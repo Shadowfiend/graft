@@ -1,4 +1,5 @@
 graft = require('./graft').graft
+crypto = require 'crypto'
 
 pendingRequests = {}
 
@@ -18,7 +19,7 @@ formEntryAdderFor = (ajaxId) ->
 graft.ajaxify = ($form) ->
   return unless $form.is('form')
 
-  ajaxId = 'G' + padTo(18, parseInt('0x' + crypto.randomBytes(11).toString(16)).toString(36))
+  ajaxId = 'G' + padTo(18, parseInt('0x' + crypto.randomBytes(11).toString('hex')).toString(36))
 
   $form
     .attr('action', "/graft/ajax/#{ajaxId}")
