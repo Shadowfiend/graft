@@ -47,7 +47,7 @@ vows
         'then the given element should be replaced with the jQueryied HTML': (errors, $html) ->
           assert.isNull errors
 
-          assert.length $html.find('a.magic'), 1
+          assert.equal $html.find('a.magic').length, 1
           assert.equal $html.find('a.magic').text(), 'author'
           assert.equal $html.find('a.magic').attr('href'), 'link'
 
@@ -94,8 +94,7 @@ vows
             return
 
           'then there should be 3 elements resulting': (errors, $html) ->
-            # FIXME for some reason vows freaks out (probably eyes) if we assert.length and it fails
-            assert.length $html.find('li.author'), 3
+            assert.equal $html.find('li.author').length, 3
 
           'and each element should have the appropriate author info bound': (errors, $html) ->
             $elements = [
