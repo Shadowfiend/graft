@@ -1,9 +1,9 @@
-require.paths.unshift "#{__dirname}/../lib"
+#require.paths.unshift "#{__dirname}/../lib"
 
 global.vows = require 'vows'
 global.assert = require 'assert'
 global.jsdom = require 'jsdom'
-global.graft = require('graft').graft
+global.graft = require('../lib/graft').graft
 global.eyes = require('eyes')
 
 # Wrap any HTML in this so that jsdom can set up jquery properly.

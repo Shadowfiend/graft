@@ -1,6 +1,6 @@
 require './test-helpers.coffee'
 
-require 'graft-forms'
+require '../lib/graft-forms'
 
 vows
   .describe('Grafting forms')

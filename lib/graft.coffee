@@ -2,7 +2,7 @@
 # Graft                                                                        #
 # Templating that doesn't suck... for Node and the browser.                    #
 #                                                                              #
-# Copyright 2010 Antonio Salazar Cardozo                                       #
+# Copyright 2010-2012 Antonio Salazar Cardozo                                  #
 # Released under the terms of the MIT License.                                 #
 ################################################################################
 
