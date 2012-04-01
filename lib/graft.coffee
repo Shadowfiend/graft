@@ -95,6 +95,8 @@ specified, thus also acting as a guard against replay attacks).
 ###
 addGraft = (jQuery) ->
   $ = jQuery
+  return false if ! $?.fn?
+
   $.fn.graft = (selector, generators, interceptors) ->
     $original = $base = this
     if $original.is('.template')
@@ -177,16 +179,21 @@ addGraft = (jQuery) ->
 
     $base
 
+  return true
+
 graft = (html, generators, callback) ->
   window = jsdom.jsdom(html).createWindow()
   try
     jsdom.jQueryify window, "#{__dirname}/jquery-1.7.2.js", ->
       jquery = window.jQuery
 
-      addGraft jquery
-      jquery('html').graft generators, graft.interceptors
+      result = addGraft jquery
+      if result
+        jquery('html').graft generators, graft.interceptors
 
-      callback null, "<html>#{jquery('html').html()}</html>"
+        callback null, "<html>#{jquery('html').html()}</html>"
+      else
+        callback 'Failed to link graft into DOM.'
   catch error
     callback error
 
