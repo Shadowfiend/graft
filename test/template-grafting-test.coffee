@@ -143,4 +143,35 @@ vows
             assert.equal $elements[1].find('span.date').text(), 'June 2nd'
             assert.equal $elements[2].find('h3').text(), 'F. Scott Fitzgerald'
             assert.equal $elements[2].find('span.date').text(), 'September 24th'
+
+        'when you graft the authors as a function':
+          topic: (authors, html) ->
+            graftAndjQueryHtml(
+              'li.author':
+                authors.map (author) ->
+                  ($li) ->
+                    $li
+                      .find('h3')
+                        .text(author.name)
+                      .end()
+                      .find('.birth-date span.date')
+                        .text(author.birthDate)
+            ).call(this, html)
+
+          'then there should be 3 elements resulting': (errors, $html) ->
+            assert.equal $html.find('li.author').length, 3
+
+          'and each element should have the appropriate author info bound': (errors, $html) ->
+            $elements = [
+              $html.find('li.author:eq(0)'),
+              $html.find('li.author:eq(1)'),
+              $html.find('li.author:eq(2)')
+            ]
+
+            assert.equal $elements[0].find('h3').text(), 'Roald Dahl'
+            assert.equal $elements[0].find('span.date').text(), 'September 13th'
+            assert.equal $elements[1].find('h3').text(), 'Norton Juster'
+            assert.equal $elements[1].find('span.date').text(), 'June 2nd'
+            assert.equal $elements[2].find('h3').text(), 'F. Scott Fitzgerald'
+            assert.equal $elements[2].find('span.date').text(), 'September 24th'
   ).export module

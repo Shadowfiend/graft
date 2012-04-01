@@ -151,19 +151,22 @@ addGraft = (jQuery) ->
             generators.map((generator) ->
               generatorType = typeof generator
 
-              if generatorType == 'object'
-                $toGraft.clone().graft generator
-              else if generatorType == 'string' || generatorType == 'number'
-                $toGraft.clone().text generator
-              else if generatorType == 'function'
-                $toGraft.clone().each generator
+              $clone = $toGraft.clone()
+              $generated =
+                if generatorType == 'object'
+                  $clone.graft generator
+                else if generatorType == 'string' || generatorType == 'number'
+                  $clone.text generator
+                else if generatorType == 'function'
+                  $clone.each (i, element) ->
+                    generator $(element)
             ).forEach ($generated) ->
               $toGraft.before($generated)
 
             $toGraft.remove()
 
-          # If we get a non-jQuery object, we just run graft all the properties as
-          # selectors with their values as generators.
+          # If we get a non-jQuery object, we just run graft on all the
+          # properties as selectors with their values as generators.
           else
             $base.find(selector).graft subselector, generator for subselector, generator of generators
 
