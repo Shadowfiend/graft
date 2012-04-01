@@ -177,7 +177,7 @@ addGraft = (jQuery) ->
 graft = (html, generators, callback) ->
   window = jsdom.jsdom(html).createWindow()
   try
-    jsdom.jQueryify window, "#{__dirname}/jquery-1.5.js", ->
+    jsdom.jQueryify window, "#{__dirname}/jquery-1.7.2.js", ->
       jquery = window.jQuery
 
       addGraft jquery
@@ -193,7 +193,7 @@ graft.withjQuery = (html, callback) ->
   try
     window = jsdom.jsdom(html).createWindow()
 
-    jsdom.jQueryify window, "#{__dirname}/jquery-1.5.js", ->
+    jsdom.jQueryify window, "#{__dirname}/jquery-1.7.2.js", ->
       jquery = window.jQuery
 
       addGraft jquery

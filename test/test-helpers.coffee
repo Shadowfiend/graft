@@ -20,7 +20,7 @@ global.htmlize = (body) ->
 global.getjQuery = (html, callback) ->
   window = jsdom.jsdom(htmlize(html)).createWindow()
 
-  jsdom.jQueryify window, "#{__dirname}/../lib/jquery-1.5.js", (window, jquery) ->
+  jsdom.jQueryify window, "#{__dirname}/../lib/jquery-1.7.2.js", (window, jquery) ->
     callback jquery
 
 # Takes html, pulls in jquery via getjQuery, and passes any error + the
