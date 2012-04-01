@@ -19,7 +19,7 @@
   },
   "main": "./lib",
   "dependencies": {
-    "jsdom": "https://github.com/tmpvar/jsdom/tarball/4cf155a1624b3fb54b2eec536a0c060ec1bab4ab",
+    "jsdom": "0.2.13",
     "coffee-script": "1.0.1"
   }
 }
