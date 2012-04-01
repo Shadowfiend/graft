@@ -10,6 +10,7 @@ global.eyes = require('eyes')
 global.htmlize = (body) ->
   """
   <html>
+    <head></head>
     <body>
       #{body}
     </body>

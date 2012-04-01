@@ -11,6 +11,12 @@ vows
         <div class="nested">
           <span class="magic">Boom</span>
         </div>
+        <ul class="boom">
+          <li>Boom</li>
+        </ul>
+        <ul class="bam">
+          <li>Bam</li>
+        </ul>
         """
 
       'when you graft plain text to an element':
@@ -19,6 +25,34 @@ vows
         "then that element's text will be set": (errors, $html) ->
           assert.isNull errors
           assert.equal $html.find('.item').text(), 'booyan'
+
+      'when you graft text into two ul lis':
+        topic: graftAndjQueryHtml('.boom li': 'boom', '.bam li': 'bam')
+
+        'then you should still have both uls with lis': (errors, $html) ->
+          assert.isNull errors
+          assert.equal $html.find('.boom li').length, 1
+          assert.equal $html.find('.bam li').length, 1
+
+        'and their text should be set appropriately': (errors, $html) ->
+          assert.isNull errors
+          assert.equal $html.find('.boom li').text(), 'boom'
+          assert.equal $html.find('.bam li').text(), 'bam'
+
+      'when you graft text iteratively into two ul lis':
+        topic: graftAndjQueryHtml('.boom li': ['boom', 'bam'], '.bam li': ['bam', 'boom'])
+
+        'then you should still have both uls with lis': (errors, $html) ->
+          assert.isNull errors
+          assert.equal $html.find('.boom li').length, 2
+          assert.equal $html.find('.bam li').length, 2
+
+        'and their text should be set appropriately': (errors, $html) ->
+          assert.isNull errors
+          assert.equal $html.find('.boom li').eq(0).text(), 'boom'
+          assert.equal $html.find('.boom li').eq(1).text(), 'bam'
+          assert.equal $html.find('.bam li').eq(0).text(), 'bam'
+          assert.equal $html.find('.bam li').eq(1).text(), 'boom'
 
       'when you graft plain text to an attribute':
         topic: graftAndjQueryHtml('.link[href]': '/magic')
