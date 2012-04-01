@@ -1,7 +1,7 @@
 {
   "name": "graft",
   "description": "A library for template binding to facilitate view-first development.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Antonio Salazar Cardozo <savedfastcool@gmail.com>",
   "main": "./lib/graft.js",
   "engines": { "node": ">= 0.6.13" },
