@@ -1,0 +1,241 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>Graft</title>
+  <meta name="description" content="Templating that doesn't suck... for Node and the browser.">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">Graft</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">Templating that doesn't suck... for Node and the browser.</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/Shadowfiend/graft/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/Shadowfiend/graft/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/Shadowfiend/graft" class="code">fork Graft on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h1>Graft</h1>
+
+<p><strong>Proposition:</strong> my view should be viewable as plain HTML without a server while
+I'm designing/styling it, and data should be bound on top of it as easily as
+possible.</p>
+
+<p><strong>Solution:</strong> graft.</p>
+
+<p><strong>Props to/superheavy inspiration from:</strong> <a href="http://liftweb.net/">Lift</a>.</p>
+
+<p><strong>Also see:</strong> A very similar library from the folks at <a href="http://nodejitsu.com/">nodejitsu</a>, <a href="https://github.com/hij1nx/weld">weld</a>.</p>
+
+<p><strong>Built on:</strong> The awesomeness of <a href="https://github.com/tmpvar/jsdom">jsdom</a> (also from the folks at nodejitsu).</p>
+
+<h2>Usage</h2>
+
+<p>There are several possible usages:</p>
+
+<pre><code>$('li.template')
+  .graft('.author', authorName) // sets .author elements' text to authorName
+  .graft('.author',
+    $('a')
+      .text(authorName)
+      .href('link-to-author')) // sets .author elements' html to resulting anchor element
+  .graft('.author',
+    function($elt) {
+      $elt.text(item.creatorName);
+    }) // passes the selected elements in for mutation
+  .graft('.author',
+    {
+      '.name': authorName,
+      '.link': $('a').text(authorName).href('link-to-author')
+    }) // does a graft on each of these sub-elements
+  .graft(
+    {
+      '.author': authorName,
+      '.link': $('&lt;a&gt;').text(authorName).attr('href', 'link-to-author')
+    }) // as above, but searches the top-level object instead of a sub-object
+</code></pre>
+
+<p>If the graft call is invoked on an element with class 'template', it
+will clone that element and remove the template class, add the resulting
+element to the same container, and then return the new resulting element. If,
+on the other hand, the graft call is invoked on an element without that class,
+it will operate directly on the element and return it.</p>
+
+<h2>Collections</h2>
+
+<p>For collections of items, we take a similar tack. It would suck to have to use
+a double-function for each collection (one for iteration and one for graft), so
+we do some goodness:</p>
+
+<pre><code>$('ul')
+  .graft('li.template',
+    authors.map(function(author) {
+      return {
+        '.author': author.name,
+        '.link': $('a').text(author.name).href(linkFor(author)),
+      }
+    })
+</code></pre>
+
+<p>The mechanism is straightforward: if you pass an array as the second parameter,
+each object in the array is passed to graft in turn, each with a new clone of
+the matched element(s). Then, these elements are gathred up and put into the
+DOM instead of the matched element. This means you provide an array of
+functions, if you prefer, or an object, as above, or a string, etc.</p>
+
+<p>The goodness is good, no?</p>
+
+<h2>Easily Setting Attributes</h2>
+
+<p>Graft adds just a little bit of bam-bam-bam to selectors:</p>
+
+<pre><code>$('li.template')
+  .graft({
+    '.author': author.name,
+    '.link[href]': linkFor(author)
+  })
+</code></pre>
+
+<p>This lets us set the href with zero effort. The downside is, the above selector
+also means `elements with class link that have an attribute href'. I've found
+that is fairly rarely used, but if you still want to use it, just put a space
+at the end of the selector:</p>
+
+<pre><code>$('li.template')
+  .graft({
+    '.author': author.name,
+    '.link[href] ': function($elt) { /* do stuff with the link */ }
+  })
+</code></pre>
+
+<p>We're not <em>quite</em> done yet, however. There is also a dash of goodness for
+adding to an attribute (particularly handy for classes):</p>
+
+<pre><code>$('li.template')
+  .graft({
+    '.author': author.name,
+    '.link[class+]': author.category
+  })
+</code></pre>
+
+<h2>CoffeeScript</h2>
+
+<p>Graft is written in CoffeeScript (though a compiled JS version is included)
+because CoffeeScript is kind of gorgeous. It also benefits from CoffeeScript's
+prettiness in use. For example:</p>
+
+<pre><code>$('ul')
+  .graft 'li.template', authors.map (author) -&gt;
+      '.author, .link': author.name,
+      '.link[class+]': author.category
+      '.about-me':
+        '.avatar[src]': avatarFor(author),
+        '.description': author.description
+</code></pre>
+
+<h2>Node.js</h2>
+
+<p>For node.js, the module exports a function that lets you just pass in HTML or
+the name of a file containing HTML and run with it. We can use it as follows:</p>
+
+<pre><code>var graft = require('graft').graft;
+graft('&lt;p&gt;My &lt;a href="place.html"&gt;HTML&lt;/a&gt;&lt;/p&gt;&lt;div&gt;magic&lt;/div&gt;',
+  {
+    'p a[href]': '<a href="http://google.com">http://google.com</a>',
+    'div': 'unicorns!'
+  },
+  function(errors, grafted) {
+    response.send(grafted, { 'Content-Type': 'text/html' }, 200);
+  });
+</code></pre>
+
+<p>If you need access to the jQuery object (for example, because you want to
+create some elements to graft in), graft exposes an easier method for doing
+that, withjQuery:</p>
+
+<pre><code>var graft = require('graft').graft,
+    withjQuery = graft.withjQuery;
+
+withjQuery('&lt;p&gt;My &lt;a href="place.html"&gt;HTML&lt;/a&gt;&lt;/p&gt;&lt;div&gt;magic&lt;/div&gt;', function(errors, $) {
+  $('body')
+    .graft({
+      'p a[href]': '<a href="http://google.com">http://google.com</a>',
+      'div': $('&lt;p&gt;').text('unicorns!')
+    })
+});
+</code></pre>
+
+<p>This lets you use jQuery directly when your use case requires it. You will then
+have to manually convert the jQuery results back to HTML:</p>
+
+<pre><code>var graft = require('graft').graft,
+    withjQuery = graft.withjQuery;
+
+withjQuery('&lt;p&gt;My &lt;a href="place.html"&gt;HTML&lt;/a&gt;&lt;/p&gt;&lt;div&gt;magic&lt;/div&gt;', function(errors, $) {
+  $('body')
+    .graft({
+      'p a[href]': '<a href="http://google.com">http://google.com</a>',
+      'div': $('&lt;p&gt;').text('unicorns!')
+    });
+
+  response.send("&lt;html&gt;" + $('html').html() + "&lt;/html&gt;", { 'Content-Type': 'text/html' }, 200);
+});
+</code></pre>
+
+<p>Graft exposes an htmlize function for this purpose, which is passed in as a third parameter:</p>
+
+<pre><code>var graft = require('graft').graft,
+    withjQuery = graft.withjQuery;
+
+withjQuery('&lt;p&gt;My &lt;a href="place.html"&gt;HTML&lt;/a&gt;&lt;/p&gt;&lt;div&gt;magic&lt;/div&gt;', function(errors, $, htmlize) {
+  $('body')
+    .graft({
+      'p a[href]': '<a href="http://google.com">http://google.com</a>',
+      'div': $('&lt;p&gt;').text('unicorns!')
+    });
+
+  response.send(htmlize(), { 'Content-Type': 'text/html' }, 200);
+});
+</code></pre>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/Shadowfiend" class="avatar"><img src="https://secure.gravatar.com/avatar/36b4b730bc6d058fd0737fc44119ed6f?s=30&amp;d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png" width="48" height="48"/></a> <a href="https://github.com/Shadowfiend">Shadowfiend</a> maintains <a href="https://github.com/Shadowfiend/graft">Graft</a></p>
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br/>theme by <a href="http://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/Shadowfiend/graft/tarball/master" class="tar">tar</a><a href="https://github.com/Shadowfiend/graft/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+  
+</body>
+</html>
